@@ -20,9 +20,8 @@ class ItemFactory extends Factory
     {
         return [
             'name' => '商品' . sprintf('%03d', self::$sequence++),
-            'memo' => fake('ja_JP')->realTextBetween(10, 20),
+            'memo' => fake()->realTextBetween(10, 20),
             'price' => fake()->numberBetween(1000, 10000),
-            // 'is_selling' => true,
         ];
     }
 }
