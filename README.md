@@ -9,3 +9,13 @@
 % php artisan --version      
 Laravel Framework 10.48.10
 ```
+
+## Install
+
+```bash
+ % composer require laravel/breeze --dev
+```
+
+```bash
+ % composer require barryvdh/laravel-debugbar
+ ```
