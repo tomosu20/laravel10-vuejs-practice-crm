@@ -33,7 +33,8 @@ defineProps({ items: Array })
                                         <tr>
                                             <th
                                                 class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">
-                                                ID</th>
+                                                ID
+                                            </th>
                                             <th
                                                 class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
                                                 Name</th>
@@ -50,9 +51,15 @@ defineProps({ items: Array })
                                     </thead>
                                     <tbody>
                                         <tr v-for="item in items" :key="item.id">
-                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">{{ item.id }}
+                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
+
+                                                {{ item.id }}
                                             </td>
-                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">{{ item.name }}
+                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
+                                                <Link class="text-blue-400"
+                                                    :href="route('items.show', { item: item.id })">
+                                                {{ item.name }}
+                                                </Link>
                                             </td>
                                             <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">{{ item.memo }}
                                             </td>
