@@ -1,9 +1,16 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { nl2br } from '@/common';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 
 defineProps({ item: Object })
+
+const deleteItem = id => {
+    router.delete(route('items.destroy', { item: id }), {
+        onBefore: () => confirm('Is Really, delete item?')
+    })
+}
+
 </script>
 
 <template>
@@ -73,6 +80,10 @@ defineProps({ item: Object })
                                             class="flex mx-auto ml-2 text-white bg-indigo-400 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
                                         Edit
                                         </Link>
+                                        <div
+                                            class="flex mx-auto ml-2 rounded text-lg py-2 px-8 text-red-600 bg-red-200 hover:bg-red-600 hover:text-white">
+                                            <button @click="deleteItem(item.id)">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
