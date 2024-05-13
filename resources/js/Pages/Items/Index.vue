@@ -1,5 +1,6 @@
 <script setup>
 import FlashMessage from '@/Components/FlashMessage.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
@@ -22,9 +23,10 @@ defineProps({ items: Array })
                         <div class="container px-5 py-8 mx-auto">
                             <FlashMessage />
                             <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto">
-                                <Link as="button" :href="route('items.create')"
-                                    class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
-                                Add Item
+                                <Link as="button" :href="route('items.create')" class="flex ml-auto">
+                                <SecondaryButton color-pattern="indigo">
+                                    Add Item
+                                </SecondaryButton>
                                 </Link>
                             </div>
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">

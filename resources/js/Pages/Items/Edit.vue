@@ -1,12 +1,16 @@
 <script setup>
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({ item: Object, errors: Object })
 
-const form = reactive({
+const form = useForm({
     id: props.item.id,
     name: props.item.name,
     memo: props.item.memo,
@@ -40,32 +44,31 @@ const updateItem = id => {
                                     <div class="flex flex-wrap -m-2">
                                         <div class="p-2 w-full">
                                             <div class="relative">
-                                                <label for="name" class="leading-7 text-sm text-gray-600">Name</label>
-                                                <input type="text" id="name" name="name" v-model="form.name"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                                                <div class="text-red-600" v-if="errors.name">{{ errors.name }}</div>
+                                                <InputLabel for="name" value="Name" />
+                                                <TextInput id="name" type="text" class="mt-1 block w-full"
+                                                    v-model="form.name" autofocus autocomplete="name" />
+                                                <InputError :message="errors.name" />
                                             </div>
                                         </div>
                                         <div class="p-2 w-full">
                                             <div class="relative">
-                                                <label for="memo" class="leading-7 text-sm text-gray-600">Memo</label>
-                                                <textarea id="memo" name="memo" v-model="form.memo"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
-                                                <div class="text-red-600" v-if="errors.memo">{{ errors.memo }}</div>
+                                                <InputLabel for="memo" value="Memo" />
+                                                <TextInput id="memo" type="text" class="mt-1 block w-full h-32"
+                                                    v-model="form.memo" autocomplete="memo" :is-multiline="true" />
+                                                <InputError :message="errors.memo" />
                                             </div>
                                         </div>
                                         <div class="p-2 w-full">
                                             <div class="relative">
-                                                <label for="price" class="leading-7 text-sm text-gray-600">Price</label>
-                                                <input type="number" id="price" name="price" v-model="form.price"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                                                <div class="text-red-600" v-if="errors.price">{{ errors.price }}</div>
+                                                <InputLabel for="price" value="Price" />
+                                                <TextInput id="price" type="number" class="mt-1 block w-full"
+                                                    v-model="form.price" autocomplete="price" />
+                                                <InputError :message="errors.price" />
                                             </div>
                                         </div>
                                         <div class="p-2 w-full">
                                             <div class="relative">
-                                                <label for="is_selling"
-                                                    class="leading-7 text-sm text-gray-600">Status</label>
+                                                <InputLabel for="is_selling" value="Status" />
                                                 <div>
                                                     <input type="radio" name="is_selling" v-model="form.is_selling"
                                                         value="1" id="select_radio1">
@@ -74,17 +77,16 @@ const updateItem = id => {
                                                         value="0" id="select_radio2">
                                                     <label for="select_radio2" class="ml-2 mr-4">停止中</label>
                                                 </div>
-                                                <div class="text-red-600" v-if="errors.is_selling">{{ errors.is_selling
-                                                    }}
-                                                </div>
+                                                <InputError :message="errors.is_selling" />
                                             </div>
                                         </div>
-                                        <div class="p-2 flex">
-                                            <Link as="button" :href="route('items.show', { item: item.id })"
-                                                class="mr-4 mx-auto rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-lg text-indigo-400 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400">
-                                            Cancel</Link>
-                                            <button
-                                                class="mr-4 mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Save</button>
+                                        <div class="p-2 flex mt-2">
+                                            <Link as="button" :href="route('items.show', { item: item.id })">
+                                            <SecondaryButton class="mr-2" :disabled="form.processing">
+                                                Cancel
+                                            </SecondaryButton>
+                                            </Link>
+                                            <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
                                         </div>
                                     </div>
                                 </div>
