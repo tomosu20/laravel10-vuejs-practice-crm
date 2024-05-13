@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Models\Item;
+use Exception;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ItemController extends Controller
@@ -90,5 +92,41 @@ class ItemController extends Controller
                 'message' => 'success delete item.',
                 'status' => 'danger'
             ]);
+    }
+
+    public function upload()
+    {
+        return Inertia::render('Items/Upload');
+    }
+
+    public function csvImport(Request $request)
+    {
+        $this->validate($request, [
+            'csv' => 'mimes:csv'
+        ]);
+
+
+        if ($request->hasFile('csvFile')) {
+            $file = $request->file('csvFile');
+            $path = $file->getRealPath();
+            $fp = fopen($path, 'r');
+            fgetcsv($fp);
+            //TODO: N+1問題の改善
+            while (($csvData = fgetcsv($fp)) !== false) {
+                $this->InsertCsvData($csvData);
+            }
+            fclose($fp);
+        } else {
+            throw new Exception('Failed to import csv file.');
+        }
+    }
+
+    private function InsertCsvData($csvData)
+    {
+        Item::create([
+            'name' => $csvData[0],
+            'memo' => $csvData[1],
+            'price' => $csvData[2],
+        ]);
     }
 }
