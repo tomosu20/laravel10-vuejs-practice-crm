@@ -1,8 +1,9 @@
 <script setup>
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import axios from 'axios';
 import { ref } from 'vue';
 
@@ -11,9 +12,7 @@ const uploadedData = ref(null);
 
 const handleFileUpload = (event) => {
     uploadedFile.value = event.target.files[0];
-};
 
-const uploadData = () => {
     const formData = new FormData();
     formData.append('csvFile', uploadedFile.value);
 
@@ -29,6 +28,11 @@ const uploadData = () => {
             console.error('Upload failed:', error);
         });
 };
+
+const bulkCreateItem = () => {
+    router.post(route('items.bulkStore'), uploadedData.value)
+}
+
 </script>
 
 
@@ -51,42 +55,57 @@ const uploadData = () => {
                                     <div class="p-2 w-full">
                                         <div class="relative">
                                             <div class="content">
+                                                <Link as="button" class="mb-4" :href="route('items.index')">
+                                                <SecondaryButton><svg class="w-3 h-3 mr-1" viewBox="0 0 24 24"
+                                                        stroke="currentColor" stroke-width="2" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M5 12h14"></path>
+                                                        <path d="M12 5l-7 7+7 7"></path>
+                                                    </svg>
+                                                    back</SecondaryButton>
+                                                </Link>
                                                 <InputLabel class="my-2" value="Select File" />
                                                 <input id="csvFile" type="file" @change="handleFileUpload"
                                                     accept=".csv">
-                                                <PrimaryButton @click="uploadData">
-                                                    Upload
-                                                </PrimaryButton>
                                             </div>
                                             <div class="my-6" v-if="uploadedData">
-                                                <table class="table-auto w-full text-left whitespace-no-wrap">
-                                                    <thead>
-                                                        <tr>
-                                                            <th
-                                                                class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                                                Name</th>
-                                                            <th
-                                                                class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                                                Memo</th>
-                                                            <th
-                                                                class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                                                Price</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-for="item in uploadedData">
-                                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
-                                                                {{ item.name }}
-                                                            </td>
-                                                            <td class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
-                                                                {{ item.memo }}
-                                                            </td>
-                                                            <td
-                                                                class="border-t-2 border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">
-                                                                {{ item.price }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <div>
+                                                    <table class="table-auto w-full text-left whitespace-no-wrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th
+                                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                                                    Name</th>
+                                                                <th
+                                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                                                    Memo</th>
+                                                                <th
+                                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                                                    Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="item in uploadedData">
+                                                                <td
+                                                                    class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
+                                                                    {{ item.name }}
+                                                                </td>
+                                                                <td
+                                                                    class="border-t-2 border-b-2 border-gray-200 px-4 py-3">
+                                                                    {{ item.memo }}
+                                                                </td>
+                                                                <td
+                                                                    class="border-t-2 border-b-2 border-gray-200 px-4 py-3 text-lg text-gray-900">
+                                                                    {{ item.price }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="mt-6">
+                                                    <PrimaryButton @click="bulkCreateItem">
+                                                        All Register
+                                                    </PrimaryButton>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

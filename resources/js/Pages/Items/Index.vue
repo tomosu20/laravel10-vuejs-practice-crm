@@ -23,7 +23,12 @@ defineProps({ items: Array })
                         <div class="container px-5 py-8 mx-auto">
                             <FlashMessage />
                             <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto">
-                                <Link as="button" :href="route('items.create')" class="flex ml-auto">
+                                <Link as="button" :href="route('items.upload')" class="flex ml-auto">
+                                <SecondaryButton color-pattern="indigo">
+                                    CSV
+                                </SecondaryButton>
+                                </Link>
+                                <Link as="button" :href="route('items.create')" class="flex ml-2">
                                 <SecondaryButton color-pattern="indigo">
                                     Add Item
                                 </SecondaryButton>
