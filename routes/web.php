@@ -36,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('items', ItemController::class)->middleware(['auth', 'verified']);
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('items/upload', [ItemController::class, 'upload'])->name('items.upload');
+    Route::post('items/csv-import', [ItemController::class, 'csvImport'])->name('items.csvImport');
+    Route::post('items/bulk', [ItemController::class, 'bulkStore'])->name('items.bulkStore');
+    Route::resource('items', ItemController::class);
+});
+
 
 require __DIR__ . '/auth.php';
