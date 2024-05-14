@@ -19,3 +19,7 @@ Laravel Framework 10.48.10
 ```bash
  % composer require barryvdh/laravel-debugbar
  ```
+
+```bash
+ % composer require phpoffice/phpspreadsheet
+ ```
