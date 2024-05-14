@@ -8,6 +8,7 @@ use App\Models\Item;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class ItemController extends Controller
 {
@@ -105,28 +106,21 @@ class ItemController extends Controller
             'csv' => 'mimes:csv'
         ]);
 
+        $file = $request->file('csvFile');
 
-        if ($request->hasFile('csvFile')) {
-            $file = $request->file('csvFile');
-            $path = $file->getRealPath();
-            $fp = fopen($path, 'r');
-            fgetcsv($fp);
-            //TODO: N+1問題の改善
-            while (($csvData = fgetcsv($fp)) !== false) {
-                $this->InsertCsvData($csvData);
-            }
-            fclose($fp);
-        } else {
-            throw new Exception('Failed to import csv file.');
+        $objReader = new Csv();
+        $objReader->setInputEncoding('Shift-JIS');
+        $spreadsheet = $objReader->load($file->getPathName());
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+        $value = array();
+
+        $header = array_shift($sheetData);
+
+        foreach ($sheetData as $row) {
+            $value[] = array_combine($header, $row);
         }
-    }
 
-    private function InsertCsvData($csvData)
-    {
-        Item::create([
-            'name' => $csvData[0],
-            'memo' => $csvData[1],
-            'price' => $csvData[2],
-        ]);
+        return json_encode($value, JSON_PRETTY_PRINT);
     }
 }
