@@ -24,8 +24,11 @@ class ItemController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        if (!$request->user()->hasRole('admin')) {
+            abort(403, 'permission deny');
+        }
         return Inertia::render('Items/Create');
     }
 
@@ -34,6 +37,10 @@ class ItemController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
+        if (!$request->user()->hasRole('admin')) {
+            abort(403, 'permission deny');
+        }
+
         Item::create([
             'name' => $request->name,
             'memo' => $request->memo,
@@ -84,8 +91,12 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Item $item)
+    public function destroy(Request $request, Item $item)
     {
+        if (!$request->user()->hasRole('admin')) {
+            abort(403, 'permission deny');
+        }
+
         $item->delete();
         return to_route('items.index')
             ->with([

@@ -22,7 +22,7 @@ defineProps({ items: Array })
                     <section class="text-gray-600 body-font">
                         <div class="container px-5 py-8 mx-auto">
                             <FlashMessage />
-                            <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto">
+                            <div class="flex pl-4 my-4 lg:w-2/3 w-full mx-auto" v-if="is('admin')">
                                 <Link as="button" :href="route('items.upload')" class="flex ml-auto">
                                 <SecondaryButton color-pattern="indigo">
                                     CSV

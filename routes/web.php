@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin|editor'])->group(function () {
     Route::get('items/upload', [ItemController::class, 'upload'])->name('items.upload');
     Route::post('items/csv-import', [ItemController::class, 'csvImport'])->name('items.csvImport');
     Route::post('items/bulk', [ItemController::class, 'bulkStore'])->name('items.bulkStore');
